@@ -82,13 +82,15 @@ def bank_scraper_etl():
 
         # Build the PostgreSQL URL
         postgres_url = f'postgresql+psycopg2://{uid}:{pwd}@{host}:{port}/{schema}'
+        engine = create_engine(postgres_url)
+        engine.connect()
 
         # Create the database if it doesn't exist
         if not database_exists(postgres_url):
             create_database(postgres_url)
 
         # Load the DataFrame into PostgreSQL
-        engine = create_engine(postgres_url)
+        
         table_name = 'Bank_Cap'
         df.to_sql(table_name, engine, if_exists='replace', index=False)
 
