@@ -82,8 +82,15 @@ def bank_scraper_etl():
 
         # Build the PostgreSQL URL
         postgres_url = f'postgresql+psycopg2://{uid}:{pwd}@{host}:{port}/{schema}'
-        engine = create_engine(postgres_url)
-        engine.connect()
+        # engine = create_engine(postgres_url)
+        # engine.connect()
+        try:
+            engine = create_engine(postgres_url)
+            engine.connect()  # Attempt a connection
+            print("Successfully connected to PostgreSQL database")
+        except Exception as e:
+            print(f"Error connecting to PostgreSQL: {e}")
+            raise e  # Re-raise the exception to fail the task
 
         # Create the database if it doesn't exist
         if not database_exists(postgres_url):
